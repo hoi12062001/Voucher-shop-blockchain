@@ -1,18 +1,29 @@
-import Button from 'react-bootstrap/Button';
-
+function Card() {
+  return (
+    <div class="col-2" >
+      <div class="box_section">
+        <div class="card" style={{ width: "18rem;" }}>
+          <img src="./images/type=detail.webp" class="card-img-top" alt="..." />
+          <div class="card-body">
+            <h6 class="card-title">voucher title</h6>
+            <p class="card-text">100$</p>
+            <a href="/" class="btn btn-primary">Mua</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 function TrangChu() {
   return (
-    <>
-      <Button variant="primary">Primary</Button>{' '}
-      <Button variant="secondary">Secondary</Button>{' '}
-      <Button variant="success">Success</Button>{' '}
-      <Button variant="warning">Warning</Button>{' '}
-      <Button variant="danger">Danger</Button>{' '}
-      <Button variant="info">Info</Button>{' '}
-      <Button variant="light">Light</Button>{' '}
-      <Button variant="dark">Dark</Button>
-      <Button variant="link">Link</Button>
-    </>
+    <div class="row">
+    <Card></Card>
+    <Card></Card>
+    <Card></Card>
+    <Card></Card>
+    <Card></Card>
+    <Card></Card>
+    </div>
   );
 }
 
