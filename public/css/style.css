@@ -705,3 +705,12 @@ button {
 .margin_top_80{
     margin-top: 0px;
 }
+.parent {
+    width: 100px;
+  }
+
+  .ellipsis {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }

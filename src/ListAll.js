@@ -68,26 +68,14 @@ const ListAll = () => {
             .catch((err) => {
                 console.warn(err);
             });
-    }; 
+    };
 
     return (
         <div className="grd-back">
             <div className="container-lg">
-                <div className="py-4 text-center">
-                    <h1>List All Your NFTs</h1>
-                    <p>
-                        This is a sample project which will list all your NFTs associated
-                        with your wallet
-                    </p>
-                </div>
-            </div>
-
-            <div className="container-lg">
-                {!connStatus && (<div className="card border border-primary rounded py-3 px-5 w-50 mx-auto">
+                {!connStatus && (<div className="">
                     <div className="card-body text-center">
-                        <h2 className="card-title p-2">Connect Your Wallet</h2>
-                        <p className="card-text p-1">You need to connect your wallet to deploy and interact with your contracts.</p>
-                        <button className="btn btn-primary mt-5 px-3" onClick={solanaConnect}>Connect Phantom Wallet</button>
+                        <button className="badge rounded-pill bg-dark" onClick={solanaConnect}>Kết nối tới ví</button>
                         {/* <select className="form-select" onChange={(e) => {
           console.log(e.target.value);
           (e.target.value === 'mtmsk') ? mtmskConnect() : solanaConnect();
@@ -97,67 +85,13 @@ const ListAll = () => {
         </select> */}
                     </div>
                 </div>)}
-                {connStatus && (<div className="w-50 border border-primary rounded-3 mx-auto">
-                    <div className="form-container p-3">
-                        <form>
-                            <div className="row d-flex justify-content-center">
-
-                                <div className="col-12 p-2">
-                                    <select
-                                        name="network"
-                                        className="form-control form-select"
-                                        id=""
-                                        onChange={(e) => setNetwork(e.target.value)}
-                                    >
-                                        <option value="devnet">Devnet</option>
-                                        <option value="testnet">Testnet</option>
-                                        <option value="mainnet-beta">Mainnet Beta</option>
-                                    </select>
-                                </div>
-                                <div className="col-12 p-2">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Enter Wallet Id"
-                                        value={wallID}
-                                    />
-                                </div>
-
-                            </div>
-                            <div className="text-center p-3">
-                                <button
-                                    className="btn btn-primary"
-                                    onClick={fetchNFTs}
-                                >
-                                    Get
-                                </button>
-                            </div>
-                        </form>
+                {connStatus && (
+                    <div class="parent">
+                        <div class="text-light rounded-pill bg-dark ellipsis">
+                            {wallID}
+                        </div>
                     </div>
-                </div>)}
-            </div>
-
-            <div className="container-lg">
-                <div className="cards-section py-4">
-                    <div className="row">
-                        {isLoaded &&
-                            dataFetched.result.map((item) => (
-                                <div className="col-xs-12 col-sm-3 p-3" key={item.mint}>
-                                    <div className="card nft-card">
-                                        <div className="card-body">
-                                            <a href={`/get-details?token_address=${item.mint}&apiKey=${xKey}`} target="_blank" rel="noreferrer">
-                                                <img className="img-fluid" src={item.image_uri} alt="img" />
-                                            </a>
-                                            <a href={`/get-details?token_address=${item.mint}&apiKey=${xKey}`} target="_blank" rel="noreferrer">
-                                                <h5>{item.name}</h5>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-
-                    </div>
-                </div>
+                )}
             </div>
         </div>
     );
