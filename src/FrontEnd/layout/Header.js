@@ -1,4 +1,4 @@
-import ListAll from "../ListAll";
+import ListAll from "../../ListAll";
 function HeaderSesion() {
     return (
         <div class="container-fluid">
