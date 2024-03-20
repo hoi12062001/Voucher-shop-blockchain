@@ -5,8 +5,8 @@ function Slide() {
         <div id="main_slider" class="carousel slide" data-ride="carousel">
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <div class="row">
-                <div class="col-md-6">
+              <div class="d-flex p-2 align-items-center">
+                <div class="">
                   <div class="image_1"><img src="images/Mee-market.png" alt="" /></div>
                 </div>
                 <div class="col-md-6">
