@@ -1,4 +1,4 @@
-import ListAll from "../../ListAll";
+import ListAll from "../../../ListAll";
 function HeaderSesion() {
     return (
         <div class="container-fluid">
@@ -13,7 +13,7 @@ function HeaderSesion() {
                             <a class="nav-link" href="/">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/shop">Shop</a>
+                            <a class="nav-link" href="shop">Shop</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="https://www.okx.com/vi/web3/marketplace/nft"> Thị trường NFTs</a>
