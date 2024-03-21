@@ -2,7 +2,8 @@
 
 function ProductManagement() {
     return (
-        <div class="container shadow-lg p-3 mb-5 bg-body rounded">
+        <div class="container ">
+            <div class="shadow-lg p-3 mb-5 bg-body rounded">
             <a href="AddProduct"><button class="btn btn-success my-2" >Thêm mã giảm giá</button></a>
          
             <table class="table table-striped" style={{ marginTop: "2rem"}}>
@@ -31,6 +32,7 @@ function ProductManagement() {
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
     )
 }
