@@ -1,6 +1,6 @@
 function FooterSesion() {
     return (
-        <div class="container">
+        <div class="container bg-black">
             <div class="row">
                 <div class="col-md-4">
                     <h1 class="address_text">Address</h1>
@@ -15,7 +15,7 @@ function FooterSesion() {
                     <div class="location_text"><a href="/"><img src="images/instagram-icon.png" alt="" /><span class="padding_left_15">Instagram</span></a></div>
                     <div class="location_text"><a href="/"><img src="images/Linkedin-icon.png" alt="" /><span class="padding_left_15">Linkedin</span></a></div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 ">
                     <h1 class="address_text">Newsletter</h1>
                     <input type="text" class="enter_text" placeholder="Enter Your Email" />
                     <div class="subscribe_bt"><a href="/">subscribe</a></div>

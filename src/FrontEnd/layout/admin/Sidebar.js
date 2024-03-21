@@ -4,22 +4,11 @@ import { Link } from "react-router-dom";
 
 function Sidebar() {
     return (
-        <div>
-            <div class="d-flex justify-content-between">
-                <div className="logo"><a href="index.html"><img className="w-100" src="../images/logo.png" alt="" /></a></div>
-               
-            </div>
-            <div style={{ width: "40%" }}>
-
-                <div>
-
-
-                    <div className="d-grid">
-                        <Link className="flex" to={'productManagement'}>Quản lí sản phẩm</Link>
+        <div style={{ width: "20%" }} class="shadow-lg p-3 mb-5 bg-body rounded"> 
+                    <div className="d-grid" >
+                        <Link class="btn btn-primary my-2" to={'Dashboard'}>Trang chủ</Link>
+                        <Link class="btn btn-primary my-2" to={'productManagement'}>Quản lí sản phẩm</Link>
                     </div>
-
-                </div>
-            </div>
         </div>
     );
 }
