@@ -1,16 +1,21 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom'
+
 import Sidebar from './Sidebar';
+import HeaderAdmin from './HeaderAdmin';
+
 
 
 function LayoutAdmin() {
   return (
-    
-    <div class="d-flex">
+    <div>
+      <HeaderAdmin></HeaderAdmin>
+      <div class="d-flex">
+      
         <Sidebar></Sidebar>
-          <Outlet></Outlet>
-
+        <Outlet></Outlet>
+      </div>
     </div>
+
   );
 }
-
 export default LayoutAdmin;

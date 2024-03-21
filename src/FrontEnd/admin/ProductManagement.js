@@ -1,16 +1,12 @@
-import ListAll from "../../ListAll";
+
 function ProductManagement() {
     return (
-        <div className="container" >
-                <div style={{ paddingLeft: "50rem", paddingTop: "3rem" }}>
-                    <ListAll></ListAll>
-                </div>
-            <div class="input-group flex-nowrap d-flex gap-2" style={{ paddingTop: "6rem" }}>
+        <div class="container ">
+            <div class="input-group flex-nowrap d-flex gap-2">
                 <input type="text" class="form-control" placeholder="Tìm kiếm" aria-label="Username" aria-describedby="addon-wrapping" />
                 <button>Tìm kiếm</button>
-              
             </div>
-            <table class="table">
+            <table class="table text-center">
                 <thead>
                     <tr>
                         <th>Id</th>
@@ -24,9 +20,9 @@ function ProductManagement() {
                         <td>1</td>
                         <td>2</td>
                         <td>3</td>
-                        <td class="d-flex gap-2">
+                        <td>
                             <a href="" class="btn btn-success">Thêm</a>
-                            <a href="" class="btn btn-success">Sửa</a>
+                            <a href="" class="btn btn-success " style={{ marginLeft: "1rem",marginRight: "1rem" }}>Sửa</a>
                             <a href="" class="btn btn-success">Xóa</a>
                         </td>
                         

@@ -8,12 +8,12 @@ import ProductManagement from "./FrontEnd/admin/ProductManagement";
 
 
 
+
 function App() {
   return (
     <div className="App">
       <Router>
         <Routes>
-          
           <Route exact path="/" element={<TrangChu />} >
             <Route exact index element={<Contact />} />
             <Route exact path="/shop" element={<Shop/>} />
