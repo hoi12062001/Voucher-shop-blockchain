@@ -1,9 +1,6 @@
 import { Outlet } from 'react-router-dom'
-
 import Sidebar from './Sidebar';
 import HeaderAdmin from './HeaderAdmin';
-
-
 
 function LayoutAdmin() {
   return (
@@ -12,8 +9,9 @@ function LayoutAdmin() {
       <div class="d-flex pt-2">
         <Sidebar></Sidebar>
         <Outlet></Outlet>
-      </div>
+        </div>
     </div>
+
 
   );
 }
