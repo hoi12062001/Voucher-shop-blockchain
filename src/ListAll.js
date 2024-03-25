@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
-import HeaderSesion from "./FrontEnd/layout/Header";
 
 const ListAll = () => {
   const xKey = "nTAETNpPo6oEoFHO";
@@ -11,7 +10,7 @@ const ListAll = () => {
   const [isLoaded, setLoaded] = useState(false);
   const [dataFetched, setDataFetched] = useState();
   const [connStatus, setConnStatus] = useState(false);
-
+  localStorage.setItem("privateKey", xKey);
   // Phantom Adaptor
   const solanaConnect = async () => {
     console.log("clicked solana connect");
@@ -31,7 +30,8 @@ const ListAll = () => {
       };
 
       if (wallet.address) {
-        console.log(wallet.address);
+        localStorage.setItem("adressWallet", wallet.address);
+
         setWallID(wallet.address);
         const accountInfo = await connection.getAccountInfo(
           new PublicKey(wallet.address),
@@ -61,6 +61,7 @@ const ListAll = () => {
       // Handle the response from backend here
       .then((res) => {
         console.log(res.data);
+
         setDataFetched(res.data);
         setLoaded(true);
       })
