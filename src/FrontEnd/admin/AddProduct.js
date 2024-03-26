@@ -60,6 +60,7 @@ function AddProduct() {
           throw new Error(ERROR_MESSAGE);
         }
         console.log(res.data.result.encoded_transaction);
+        console.log(description);
         const solanaTransaction = getRawTransaction(
           res.data.result.encoded_transaction
         );
@@ -78,7 +79,7 @@ function AddProduct() {
           lastValidBlockHeight,
           signature,
         });
-        setTransaction(res.data.result.encoded_transaction);
+        setTransaction(description);
         setSign(true);
         console.log(sign);
         const timeID = setTimeout(() => {

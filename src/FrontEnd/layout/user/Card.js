@@ -7,10 +7,10 @@ import { Buffer } from "buffer";
 function Card() {
   const [data, setData] = useState([]);
   const { publicKey, signTransaction, sendTransaction } = useWallet();
+  const { connection } = useConnection();
   useEffect(() => {
     fetchData(); // Gọi hàm fetchData trong useEffect để nó chỉ gọi một lần khi component được render
   }, []);
-  const { connection } = useConnection();
 
   var myHeaders = new Headers();
   myHeaders.append("x-api-key", "nTAETNpPo6oEoFHO");
@@ -83,14 +83,19 @@ function Card() {
       .catch((error) => console.log("error", error));
   };
   const buy = (mint, price) => {
-    console.log(mint, price);
+    console.log(price);
+    console.log(mint);
     var raw = JSON.stringify({
       network: "devnet",
       marketplace_address: "2RkvPdnYmqYptXHcgpFT1wLqwff2HgqHoZvUcbgh3Sy6",
       nft_address: mint,
       price: price,
-      seller_address: "BkvAwpkpqLP7PjTsHTLkGDjwEiEmVELjCFiBXG8RV6y4",
+      seller_address: "L3x4bNVQsm17ep3uMR77zHKsSP3Q75qN7kxaJu5Cjbu",
       buyer_wallet: publicKey,
+      service_charge: {
+        receiver: "499qpPLdqgvVeGvvNjsWi27QHpC8GPkPfuL5Cn2DtZJe",
+        amount: 0.01,
+      },
     });
     var requestOptions = {
       method: "POST",
@@ -101,8 +106,26 @@ function Card() {
 
     fetch("https://api.shyft.to/sol/v1/marketplace/buy", requestOptions)
       .then((response) => response.json())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
+      .then(async (result) => {
+        const solanaTransaction = getRawTransaction(
+          result.result.encoded_transaction
+        );
+
+        const {
+          context: { slot: minContextSlot },
+          value: { blockhash, lastValidBlockHeight },
+        } = await connection.getLatestBlockhashAndContext();
+        const signature = await sendTransaction(solanaTransaction, connection, {
+          minContextSlot,
+        });
+        console.log("Transaction sent:", signature);
+
+        await connection.confirmTransaction({
+          blockhash,
+          lastValidBlockHeight,
+          signature,
+        });
+      });
   };
   return (
     <>
