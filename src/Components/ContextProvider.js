@@ -4,7 +4,7 @@ import {
   WalletProvider,
 } from "@solana/wallet-adapter-react";
 import { WalletModalProvider as ReactUIWalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import { UnsafeBurnerWalletAdapter } from "@solana/wallet-adapter-wallets";
+import { SolflareWalletAdapter } from "@solana/wallet-adapter-wallets";
 import { verifySignIn } from "@solana/wallet-standard-util";
 import { clusterApiUrl } from "@solana/web3.js";
 import React, { useCallback, useMemo } from "react";
@@ -33,7 +33,7 @@ const WalletContextProvider = ({ children }) => {
        * instantiate its legacy wallet adapter here. Common legacy adapters can be found
        * in the npm package `@solana/wallet-adapter-wallets`.
        */
-      new UnsafeBurnerWalletAdapter(),
+      new SolflareWalletAdapter(),
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [network]

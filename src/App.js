@@ -10,6 +10,8 @@ import EditProduct from "./FrontEnd/Admin/EditProduct";
 import Dashboard from "./FrontEnd/Admin/Dashboard";
 import { ContextProvider } from "./Components/ContextProvider";
 
+require("@solana/wallet-adapter-react-ui/styles.css");
+
 function App() {
   return (
     <div className="App">

@@ -6,6 +6,11 @@ import Sign from "../../Components/auth/Sign";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { Transaction, VersionedTransaction } from "@solana/web3.js";
 import bs58 from "bs58";
+import {
+  WalletConnectButton,
+  WalletMultiButton,
+} from "@solana/wallet-adapter-react-ui";
+import { Buffer } from "buffer";
 
 const ERROR_MESSAGE = "Vui lòng nhập vào trường này";
 const SUCCESS_MESSAGE = "Thành công";
@@ -16,13 +21,16 @@ function AddProduct() {
   const [time, setTime] = useState(null);
   const [sign, setSign] = useState(false);
   const { connection } = useConnection();
-  const { publicKey, signTransaction } = useWallet();
+  const { publicKey, signTransaction, sendTransaction } = useWallet();
   const onFinish = async (values) => {
-    const addressWallet = localStorage.getItem("adressWallet");
+    const addressWallet = publicKey;
     const network = "devnet";
-    const { name, symbol, description, max_supply, royalty } = values;
+    const { name, symbol, description, max_supply, royalty, price } = values;
 
-    const attributes = JSON.stringify([{ percentage: "0.1" }]);
+    const attributes = JSON.stringify([
+      { trait_type: "price", value: 0.3 },
+      { trait_type: "percent", value: 0.3 },
+    ]);
 
     let formData = new FormData();
     formData.append("network", network);
@@ -33,13 +41,14 @@ function AddProduct() {
     formData.append("attributes", attributes);
     formData.append("max_supply", max_supply);
     formData.append("royalty", royalty);
+    formData.append("price", price);
 
     try {
       if (formData) {
         if (!publicKey) throw new Error("Wallet not connected!");
         if (!signTransaction)
           throw new Error("Wallet does not support transaction signing!");
-
+        console.log(signTransaction);
         const res = await createNFT(formData);
         if (res) {
           const data = await axios.post("http://localhost:3000/voucher", {
@@ -55,13 +64,20 @@ function AddProduct() {
           res.data.result.encoded_transaction
         );
 
-        const signedTransaction = await signTransaction(solanaTransaction);
-        if (!signedTransaction.signature)
-          throw new Error("Transaction not signed!");
-        const signature = bs58.encode(transaction.signature);
-        console.log(`Transaction signed: ${signature}`);
-        if (!transaction.verifySignatures())
-          throw new Error(`Transaction signature invalid! ${signature}`);
+        const {
+          context: { slot: minContextSlot },
+          value: { blockhash, lastValidBlockHeight },
+        } = await connection.getLatestBlockhashAndContext();
+        const signature = await sendTransaction(solanaTransaction, connection, {
+          minContextSlot,
+        });
+        console.log("Transaction sent:", signature);
+
+        await connection.confirmTransaction({
+          blockhash,
+          lastValidBlockHeight,
+          signature,
+        });
         setTransaction(res.data.result.encoded_transaction);
         setSign(true);
         console.log(sign);
@@ -80,20 +96,6 @@ function AddProduct() {
 
   return (
     <>
-      {" "}
-      <Modal
-        title={
-          <h2 className=" font-bold text-[24px]">
-            Nhập mật khẩu để xác nhận giao dịch
-          </h2>
-        }
-        open={sign}
-        onCancel={() => setSign(false)}
-        footer=""
-        styles={{ body: { marginTop: "20px" } }}
-      >
-        <Sign transaction={transaction} time={time} setSign={setSign} />
-      </Modal>
       <Form onFinish={onFinish} autoComplete="off">
         <div style={{ minWidth: "600px", backgroundColor: "" }}>
           <Form.Item
@@ -123,6 +125,13 @@ function AddProduct() {
             />
           </Form.Item>
 
+          <Form.Item
+            label="Price *"
+            name="price"
+            rules={[{ required: true, message: ERROR_MESSAGE }]}
+          >
+            <Input placeholder="Giá" />
+          </Form.Item>
           <Form.Item
             label="Max Supply"
             name="max_supply"

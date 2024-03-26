@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 const ListAll = () => {
   const xKey = "nTAETNpPo6oEoFHO";
@@ -74,36 +76,14 @@ const ListAll = () => {
   useEffect(() => {
     fetchNFTs();
   }, []);
+  const { connection } = useConnection();
+
+  const { publicKey, signTransaction, sendTransaction } = useWallet();
+
   return (
     <div className="grd-back">
       <div className="container-lg">
-        {!connStatus && (
-          <div className="">
-            <div className="card-body text-center">
-              <button
-                className="badge rounded-pill bg-dark"
-                onClick={solanaConnect}
-              >
-                Kết nối tới ví
-              </button>
-              {/* <select
-                className="form-select"
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  e.target.value === "mtmsk" ? mtmskConnect() : solanaConnect();
-                }}
-              >
-                <option value="none">Connect</option>
-                <option value="phntm">Phantom</option>
-              </select> */}
-            </div>
-          </div>
-        )}
-        {connStatus && (
-          <div class="parent">
-            <div class="text-light rounded-pill bg-dark ellipsis">{wallID}</div>
-          </div>
-        )}
+        <WalletMultiButton></WalletMultiButton>
       </div>
     </div>
   );
