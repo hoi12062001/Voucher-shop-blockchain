@@ -1,7 +1,5 @@
-import ListAll from "../../ListAll";
-// import { useQuery } from "react-query";
+import ListAll from "../../../ListAll";
 function HeaderSesion() {
-   
   return (
     <div class="container-fluid">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -29,7 +27,7 @@ function HeaderSesion() {
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/shop">
+              <a class="nav-link" href="shop">
                 Shop
               </a>
             </li>
@@ -45,11 +43,6 @@ function HeaderSesion() {
             <li class="nav-item">
               <a class="nav-link" href="https://solana.com/vi/events">
                 Sự kiện
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="https://solana.com/vi/docs">
-                Xây dựng
               </a>
             </li>
             <li class="nav-item">
