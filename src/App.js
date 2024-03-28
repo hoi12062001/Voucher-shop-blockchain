@@ -5,9 +5,9 @@ import Shop from "./FrontEnd/user/Shop";
 import Contact from "./FrontEnd/layout/user/Contact";
 import LayoutAdmin from "./FrontEnd/layout/admin/LayoutAdmin";
 import ProductManagement from "./FrontEnd/Admin/ProductManagement";
-import AddProduct from "./FrontEnd/Admin/AddProduct";
-import EditProduct from "./FrontEnd/Admin/EditProduct";
-import Dashboard from "./FrontEnd/Admin/Dashboard";
+// import AddProduct from "./FrontEnd/Admin/AddProduct";
+// import EditProduct from "./FrontEnd/Admin/EditProduct";
+// import Dashboard from "./FrontEnd/Admin/Dashboard";
 import { ContextProvider } from "./Components/ContextProvider";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
@@ -29,9 +29,9 @@ function App() {
                 path="ProductManagement"
                 element={<ProductManagement />}
               />
-              <Route exact path="AddProduct" element={<AddProduct />} />
+              {/* <Route exact path="AddProduct" element={<AddProduct />} />
               <Route exact path="EditProduct" element={<EditProduct />} />
-              <Route exact path="Dashboard" element={<Dashboard />} />
+              <Route exact path="Dashboard" element={<Dashboard />} /> */}
             </Route>
           </Routes>
         </Router>
