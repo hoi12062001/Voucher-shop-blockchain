@@ -36,15 +36,20 @@ function ProductManagement() {
       .catch((error) => console.log("error", error));
   };
   const marketPlace = (mint, price) => {
+    console.log(typeof price);
     var myHeaders = new Headers();
     myHeaders.append("x-api-key", "nTAETNpPo6oEoFHO");
     myHeaders.append("Content-Type", "application/json");
     var raw = JSON.stringify({
       network: "devnet",
-      marketplace_address: "2RkvPdnYmqYptXHcgpFT1wLqwff2HgqHoZvUcbgh3Sy6",
       nft_address: mint,
-      price: price,
-      seller_wallet: "L3x4bNVQsm17ep3uMR77zHKsSP3Q75qN7kxaJu5Cjbu",
+      marketplace_address: "2RkvPdnYmqYptXHcgpFT1wLqwff2HgqHoZvUcbgh3Sy6",
+      price: Number(price),
+      seller_wallet: publicKey,
+      service_charge: {
+        receiver: "499qpPLdqgvVeGvvNjsWi27QHpC8GPkPfuL5Cn2DtZJe",
+        amount: 0.01,
+      },
     });
     var requestOptions = {
       method: "POST",
@@ -68,7 +73,9 @@ function ProductManagement() {
         const signature = await sendTransaction(solanaTransaction, connection, {
           minContextSlot,
         });
-        console.log("Transaction sent:", signature);
+        notification.success({
+          message: `Thành công, transaction:${signature}`,
+        });
 
         await connection.confirmTransaction({
           blockhash,
@@ -76,7 +83,6 @@ function ProductManagement() {
           signature,
         });
       });
-    notification.success({ message: "Post NFT to marketplace completed" });
   };
   return (
     <div class="container ">
