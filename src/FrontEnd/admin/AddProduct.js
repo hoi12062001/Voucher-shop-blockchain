@@ -17,6 +17,21 @@ const SUCCESS_MESSAGE = "Thành công";
 const FAILURE_MESSAGE = "Thất bại";
 
 function AddProduct() {
+  var myHeaders = new Headers();
+  myHeaders.append("x-api-key", "20CcwuFeQOIcfuHx");
+  var requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  fetch(
+    "https://api.shyft.to/sol/v1/marketplace/active_listings?network=devnet&marketplace_address=2RkvPdnYmqYptXHcgpFT1wLqwff2HgqHoZvUcbgh3Sy6",
+    requestOptions
+  )
+    .then((response) => response.json())
+    .then((result) => console.log(result))
+    .catch((error) => console.log("error", error));
   const [transaction, setTransaction] = useState("");
   const [time, setTime] = useState(null);
   const [sign, setSign] = useState(false);
@@ -25,11 +40,12 @@ function AddProduct() {
   const onFinish = async (values) => {
     const addressWallet = publicKey;
     const network = "devnet";
-    const { name, symbol, description, max_supply, royalty, price } = values;
+    const { name, symbol, description, max_supply, royalty, price, percent } =
+      values;
 
     const attributes = JSON.stringify([
-      { trait_type: "price", value: 0.3 },
-      { trait_type: "percent", value: 0.3 },
+      { trait_type: "price", value: price },
+      { trait_type: "percent", value: percent },
     ]);
 
     let formData = new FormData();
@@ -72,7 +88,9 @@ function AddProduct() {
         const signature = await sendTransaction(solanaTransaction, connection, {
           minContextSlot,
         });
-        console.log("Transaction sent:", signature);
+        notification.success({
+          message: `Thành công, transaction:${signature}`,
+        });
 
         await connection.confirmTransaction({
           blockhash,
@@ -82,12 +100,6 @@ function AddProduct() {
         setTransaction(description);
         setSign(true);
         console.log(sign);
-        const timeID = setTimeout(() => {
-          notification.error({ message: ERROR_MESSAGE });
-        }, 10000);
-        setTime(timeID);
-
-        notification.success({ message: SUCCESS_MESSAGE });
       }
     } catch (error) {
       console.error(error);
@@ -132,6 +144,13 @@ function AddProduct() {
             rules={[{ required: true, message: ERROR_MESSAGE }]}
           >
             <Input placeholder="Giá" />
+          </Form.Item>
+          <Form.Item
+            label="Percent *"
+            name="percent"
+            rules={[{ required: true, message: ERROR_MESSAGE }]}
+          >
+            <Input placeholder="Phần trăm mã giảm giá" />
           </Form.Item>
           <Form.Item
             label="Max Supply"
