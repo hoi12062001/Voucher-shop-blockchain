@@ -7,12 +7,11 @@ import { notification } from "antd";
 
 function Card() {
   const [data, setData] = useState([]);
-  const [nfts, setNfts] = useState([]);
   const { publicKey, signTransaction, sendTransaction } = useWallet();
   const { connection } = useConnection();
   useEffect(() => {
     fetchData();
-  }, [nfts.length > 0]);
+  }, [data.length > 0]);
 
   var myHeaders = new Headers();
   myHeaders.append("x-api-key", "nTAETNpPo6oEoFHO");
@@ -30,38 +29,18 @@ function Card() {
     )
       .then((response) => response.json())
       .then((result) => {
-        setNfts(result?.result?.map((nfts) => nfts.nft_address));
+        setData(result.result);
       })
       .catch((error) => console.log("error", error));
-    console.log(nfts);
-    if (nfts.length > 0) {
-      var raw1 = JSON.stringify({
-        network: "devnet",
-        token_addresses: nfts,
-        refresh: false,
-        token_record: true,
-      });
-      var requestOptions1 = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw1,
-        redirect: "follow",
-      };
-      fetch("https://api.shyft.to/sol/v1/nft/read_selected", requestOptions1)
-        .then((response) => response.json())
-        .then((result) => setData(result))
-        .catch((error) => console.log("error", error));
-    }
   };
-  const buy = (mint, price) => {
-    console.log(price);
-    console.log(mint);
+  console.log(data);
+  const buy = (mint, price, seller_address) => {
     var raw = JSON.stringify({
       network: "devnet",
       marketplace_address: "2RkvPdnYmqYptXHcgpFT1wLqwff2HgqHoZvUcbgh3Sy6",
       nft_address: mint,
       price: Number(price),
-      seller_address: "L3x4bNVQsm17ep3uMR77zHKsSP3Q75qN7kxaJu5Cjbu",
+      seller_address: seller_address,
       buyer_wallet: publicKey,
       service_charge: {
         receiver: "499qpPLdqgvVeGvvNjsWi27QHpC8GPkPfuL5Cn2DtZJe",
@@ -102,7 +81,7 @@ function Card() {
   };
   return (
     <>
-      {data.result?.map((vocher, index) => (
+      {data?.map((voucher, index) => (
         <div key={index} class="col-3">
           <div class="box_section">
             <div class="card">
@@ -112,12 +91,18 @@ function Card() {
                 alt="..."
               />
               <div class="card-body">
-                <h6 class="card-title">{vocher.name}</h6>
-                <p class="card-text">{vocher.attributes.price}$</p>
-                <p class="card-text">{vocher.attributes.percent * 100}%</p>
-                <p class="card-text">{vocher.description}</p>
+                <h6 class="card-title">{voucher.nft.name}</h6>
+                <p class="card-text">{voucher.nft.attributes.price}$</p>
+                <p class="card-text">{voucher.nft.attributes.percent * 100}%</p>
+                <p class="card-text">{voucher.nft.description}</p>
                 <button
-                  onClick={() => buy(vocher.mint, vocher.attributes.price)}
+                  onClick={() =>
+                    buy(
+                      voucher.nft.mint,
+                      voucher.nft.attributes.price,
+                      voucher.seller_address
+                    )
+                  }
                   class="btn btn-primary"
                 >
                   Mua

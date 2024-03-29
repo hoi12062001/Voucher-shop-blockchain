@@ -6,21 +6,37 @@ import { Buffer } from "buffer";
 import { notification } from "antd";
 function ProductManagement() {
   const [data, setData] = useState([]);
+  const [nfts, setNfts] = useState([]);
+  const { publicKey, signTransaction, sendTransaction } = useWallet();
+
   useEffect(() => {
     fetchData(); // Gọi hàm fetchData trong useEffect để nó chỉ gọi một lần khi component được render
-  }, []);
-  const { publicKey, signTransaction, sendTransaction } = useWallet();
+  }, [publicKey, nfts.length > 0]);
   const { connection } = useConnection();
   const fetchData = async () => {
-    const response = await axios.get("http://localhost:3000/voucher");
+    var myHeader = new Headers();
+    myHeader.append("x-api-key", "nTAETNpPo6oEoFHO");
+
+    var requestOptions1 = {
+      method: "GET",
+      headers: myHeader,
+      redirect: "follow",
+    };
+
+    fetch(
+      `https://api.shyft.to/sol/v2/nft/read_all?network=devnet&address=${publicKey}&page=1&size=32`,
+      requestOptions1
+    )
+      .then((response) => response.json())
+      .then((result) => setNfts(result.result.nfts.map((nft) => nft.mint)))
+      .catch((error) => console.log("error", error));
     var myHeaders = new Headers();
     myHeaders.append("x-api-key", "nTAETNpPo6oEoFHO");
     myHeaders.append("Content-Type", "application/json");
-    const token_addresses = response.data.map((item) => item.mint);
-    console.log(token_addresses);
+
     var raw = JSON.stringify({
       network: "devnet",
-      token_addresses: token_addresses,
+      token_addresses: nfts,
       refresh: false,
       token_record: true,
     });

@@ -1,39 +1,16 @@
-import { Button, Form, Input, Modal, notification } from "antd";
+import { Button, Form, Input, notification } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import { createNFT } from "../../services/Nft";
-import Sign from "../../Components/auth/Sign";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { Transaction, VersionedTransaction } from "@solana/web3.js";
-import bs58 from "bs58";
-import {
-  WalletConnectButton,
-  WalletMultiButton,
-} from "@solana/wallet-adapter-react-ui";
+
 import { Buffer } from "buffer";
 
 const ERROR_MESSAGE = "Vui lòng nhập vào trường này";
-const SUCCESS_MESSAGE = "Thành công";
 const FAILURE_MESSAGE = "Thất bại";
 
 function AddProduct() {
-  var myHeaders = new Headers();
-  myHeaders.append("x-api-key", "20CcwuFeQOIcfuHx");
-  var requestOptions = {
-    method: "GET",
-    headers: myHeaders,
-    redirect: "follow",
-  };
-
-  fetch(
-    "https://api.shyft.to/sol/v1/marketplace/active_listings?network=devnet&marketplace_address=2RkvPdnYmqYptXHcgpFT1wLqwff2HgqHoZvUcbgh3Sy6",
-    requestOptions
-  )
-    .then((response) => response.json())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
-  const [transaction, setTransaction] = useState("");
-  const [time, setTime] = useState(null);
   const [sign, setSign] = useState(false);
   const { connection } = useConnection();
   const { publicKey, signTransaction, sendTransaction } = useWallet();
@@ -66,12 +43,7 @@ function AddProduct() {
           throw new Error("Wallet does not support transaction signing!");
         console.log(signTransaction);
         const res = await createNFT(formData);
-        if (res) {
-          const data = await axios.post("http://localhost:3000/voucher", {
-            mint: res.data.result.mint,
-          });
-          // return data;
-        }
+
         if (!res?.data?.success) {
           throw new Error(ERROR_MESSAGE);
         }
@@ -97,9 +69,7 @@ function AddProduct() {
           lastValidBlockHeight,
           signature,
         });
-        setTransaction(description);
         setSign(true);
-        console.log(sign);
       }
     } catch (error) {
       console.error(error);
