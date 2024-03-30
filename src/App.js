@@ -6,7 +6,7 @@ import Contact from "./FrontEnd/layout/user/Contact";
 import LayoutAdmin from "./FrontEnd/layout/admin/LayoutAdmin";
 import ProductManagement from "./FrontEnd/admin/ProductManagement";
 import AddProduct from "./FrontEnd/admin/AddProduct";
-import EditProduct from "./FrontEnd/admin/EditProduct";
+
 import Dashboard from "./FrontEnd/admin/Dashboard";
 import { ContextProvider } from "./Components/ContextProvider";
 
@@ -30,7 +30,7 @@ function App() {
                 element={<ProductManagement />}
               />
               <Route exact path="AddProduct" element={<AddProduct />} />
-              <Route exact path="EditProduct" element={<EditProduct />} />
+            
               <Route exact path="Dashboard" element={<Dashboard />} />
             </Route>
           </Routes>

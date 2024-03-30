@@ -79,8 +79,8 @@ function AddProduct() {
 
   return (
     <>
-      <Form onFinish={onFinish} autoComplete="off">
-        <div style={{ minWidth: "600px", backgroundColor: "" }}>
+      <Form onFinish={onFinish} autoComplete="off" style={{  }}>
+        <div style={{ minWidth: "1040px", backgroundColor: "" }} class="mx-3 shadow-lg p-3 mb-5 bg-body rounded">
           <Form.Item
             label="Name *"
             name="name"

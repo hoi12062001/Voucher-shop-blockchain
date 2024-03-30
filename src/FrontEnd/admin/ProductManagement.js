@@ -137,7 +137,7 @@ function ProductManagement() {
                     href="EditProduct"
                     style={{ marginLeft: "1rem", marginRight: "1rem" }}
                   >
-                    <button class="btn btn-warning ">Sửa</button>
+                   
                   </a>
                   <button
                     onClick={() =>
