@@ -6,21 +6,37 @@ import { Buffer } from "buffer";
 import { notification } from "antd";
 function ProductManagement() {
   const [data, setData] = useState([]);
+  const [nfts, setNfts] = useState([]);
+  const { publicKey, signTransaction, sendTransaction } = useWallet();
+
   useEffect(() => {
     fetchData(); // Gọi hàm fetchData trong useEffect để nó chỉ gọi một lần khi component được render
-  }, []);
-  const { publicKey, signTransaction, sendTransaction } = useWallet();
+  }, [publicKey, nfts.length > 0]);
   const { connection } = useConnection();
   const fetchData = async () => {
-    const response = await axios.get("http://localhost:3000/voucher");
+    var myHeader = new Headers();
+    myHeader.append("x-api-key", "nTAETNpPo6oEoFHO");
+
+    var requestOptions1 = {
+      method: "GET",
+      headers: myHeader,
+      redirect: "follow",
+    };
+
+    fetch(
+      `https://api.shyft.to/sol/v2/nft/read_all?network=devnet&address=${publicKey}&page=1&size=32`,
+      requestOptions1
+    )
+      .then((response) => response.json())
+      .then((result) => setNfts(result.result.nfts.map((nft) => nft.mint)))
+      .catch((error) => console.log("error", error));
     var myHeaders = new Headers();
     myHeaders.append("x-api-key", "nTAETNpPo6oEoFHO");
     myHeaders.append("Content-Type", "application/json");
-    const token_addresses = response.data.map((item) => item.mint);
-    console.log(token_addresses);
+
     var raw = JSON.stringify({
       network: "devnet",
-      token_addresses: token_addresses,
+      token_addresses: nfts,
       refresh: false,
       token_record: true,
     });
@@ -36,15 +52,20 @@ function ProductManagement() {
       .catch((error) => console.log("error", error));
   };
   const marketPlace = (mint, price) => {
+    console.log(typeof price);
     var myHeaders = new Headers();
     myHeaders.append("x-api-key", "nTAETNpPo6oEoFHO");
     myHeaders.append("Content-Type", "application/json");
     var raw = JSON.stringify({
       network: "devnet",
-      marketplace_address: "2RkvPdnYmqYptXHcgpFT1wLqwff2HgqHoZvUcbgh3Sy6",
       nft_address: mint,
-      price: price,
-      seller_wallet: "L3x4bNVQsm17ep3uMR77zHKsSP3Q75qN7kxaJu5Cjbu",
+      marketplace_address: "2RkvPdnYmqYptXHcgpFT1wLqwff2HgqHoZvUcbgh3Sy6",
+      price: Number(price),
+      seller_wallet: publicKey,
+      service_charge: {
+        receiver: "499qpPLdqgvVeGvvNjsWi27QHpC8GPkPfuL5Cn2DtZJe",
+        amount: 0.01,
+      },
     });
     var requestOptions = {
       method: "POST",
@@ -68,7 +89,9 @@ function ProductManagement() {
         const signature = await sendTransaction(solanaTransaction, connection, {
           minContextSlot,
         });
-        console.log("Transaction sent:", signature);
+        notification.success({
+          message: `Thành công, transaction:${signature}`,
+        });
 
         await connection.confirmTransaction({
           blockhash,
@@ -76,7 +99,6 @@ function ProductManagement() {
           signature,
         });
       });
-    notification.success({ message: "Post NFT to marketplace completed" });
   };
   return (
     <div class="container ">
@@ -115,7 +137,7 @@ function ProductManagement() {
                     href="EditProduct"
                     style={{ marginLeft: "1rem", marginRight: "1rem" }}
                   >
-                    <button class="btn btn-warning ">Sửa</button>
+                   
                   </a>
                   <button
                     onClick={() =>

@@ -1,35 +1,28 @@
-import { Button, Form, Input, Modal, notification } from "antd";
+import { Button, Form, Input, notification } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import { createNFT } from "../../services/Nft";
-import Sign from "../../Components/auth/Sign";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { Transaction, VersionedTransaction } from "@solana/web3.js";
-import bs58 from "bs58";
-import {
-  WalletConnectButton,
-  WalletMultiButton,
-} from "@solana/wallet-adapter-react-ui";
+
 import { Buffer } from "buffer";
 
 const ERROR_MESSAGE = "Vui lòng nhập vào trường này";
-const SUCCESS_MESSAGE = "Thành công";
 const FAILURE_MESSAGE = "Thất bại";
 
 function AddProduct() {
-  const [transaction, setTransaction] = useState("");
-  const [time, setTime] = useState(null);
   const [sign, setSign] = useState(false);
   const { connection } = useConnection();
   const { publicKey, signTransaction, sendTransaction } = useWallet();
   const onFinish = async (values) => {
     const addressWallet = publicKey;
     const network = "devnet";
-    const { name, symbol, description, max_supply, royalty, price } = values;
+    const { name, symbol, description, max_supply, royalty, price, percent } =
+      values;
 
     const attributes = JSON.stringify([
-      { trait_type: "price", value: 0.3 },
-      { trait_type: "percent", value: 0.3 },
+      { trait_type: "price", value: price },
+      { trait_type: "percent", value: percent },
     ]);
 
     let formData = new FormData();
@@ -50,12 +43,7 @@ function AddProduct() {
           throw new Error("Wallet does not support transaction signing!");
         console.log(signTransaction);
         const res = await createNFT(formData);
-        if (res) {
-          const data = await axios.post("http://localhost:3000/voucher", {
-            mint: res.data.result.mint,
-          });
-          // return data;
-        }
+
         if (!res?.data?.success) {
           throw new Error(ERROR_MESSAGE);
         }
@@ -72,22 +60,16 @@ function AddProduct() {
         const signature = await sendTransaction(solanaTransaction, connection, {
           minContextSlot,
         });
-        console.log("Transaction sent:", signature);
+        notification.success({
+          message: `Thành công, transaction:${signature}`,
+        });
 
         await connection.confirmTransaction({
           blockhash,
           lastValidBlockHeight,
           signature,
         });
-        setTransaction(description);
         setSign(true);
-        console.log(sign);
-        const timeID = setTimeout(() => {
-          notification.error({ message: ERROR_MESSAGE });
-        }, 10000);
-        setTime(timeID);
-
-        notification.success({ message: SUCCESS_MESSAGE });
       }
     } catch (error) {
       console.error(error);
@@ -97,8 +79,8 @@ function AddProduct() {
 
   return (
     <>
-      <Form onFinish={onFinish} autoComplete="off">
-        <div style={{ minWidth: "600px", backgroundColor: "" }}>
+      <Form onFinish={onFinish} autoComplete="off" style={{  }}>
+        <div style={{ minWidth: "1040px", backgroundColor: "" }} class="mx-3 shadow-lg p-3 mb-5 bg-body rounded">
           <Form.Item
             label="Name *"
             name="name"
@@ -132,6 +114,13 @@ function AddProduct() {
             rules={[{ required: true, message: ERROR_MESSAGE }]}
           >
             <Input placeholder="Giá" />
+          </Form.Item>
+          <Form.Item
+            label="Percent *"
+            name="percent"
+            rules={[{ required: true, message: ERROR_MESSAGE }]}
+          >
+            <Input placeholder="Phần trăm mã giảm giá" />
           </Form.Item>
           <Form.Item
             label="Max Supply"
